@@ -99,6 +99,14 @@ object Form1: TForm1
     Font.Style = []
     ParentFont = False
   end
+  object Label2: TLabel
+    Left = 520
+    Top = 16
+    Width = 28
+    Height = 13
+    Caption = #1057#1042#1045#1058
+    Enabled = False
+  end
   object GroupBox1: TGroupBox
     Left = 472
     Top = 224
@@ -234,7 +242,6 @@ object Form1: TForm1
     Width = 121
     Height = 21
     TabOrder = 3
-    Visible = False
   end
   object Button2: TButton
     Left = 48
@@ -253,7 +260,6 @@ object Form1: TForm1
     Height = 25
     Caption = 'TEMP2'
     TabOrder = 5
-    Visible = False
     OnClick = Button3Click
   end
   object Button4: TButton
@@ -272,7 +278,6 @@ object Form1: TForm1
     Width = 209
     Height = 21
     TabOrder = 7
-    Visible = False
   end
   object TrackBar1: TTrackBar
     Left = 24
@@ -299,6 +304,26 @@ object Form1: TForm1
     Height = 21
     TabOrder = 9
     Visible = False
+  end
+  object Button5: TButton
+    Left = 480
+    Top = 32
+    Width = 51
+    Height = 25
+    Caption = #1042#1050#1051
+    Enabled = False
+    TabOrder = 10
+    OnClick = Button5Click
+  end
+  object Button6: TButton
+    Left = 536
+    Top = 32
+    Width = 49
+    Height = 25
+    Caption = #1042#1067#1050#1051
+    Enabled = False
+    TabOrder = 11
+    OnClick = Button6Click
   end
   object Timer1: TTimer
     Interval = 100

@@ -41,6 +41,9 @@ __published:	// IDE-managed Components
         TEdit *Edit3;
         TTrackBar *TrackBar1;
         TEdit *Edit4;
+        TButton *Button5;
+        TButton *Button6;
+        TLabel *Label2;
         void __fastcall SpeedButton1Click(TObject *Sender);
         void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
         
@@ -53,6 +56,9 @@ __published:	// IDE-managed Components
         void __fastcall Button3Click(TObject *Sender);
         void __fastcall Button4Click(TObject *Sender);
         void __fastcall TrackBar1Change(TObject *Sender);
+        void __fastcall Button5Click(TObject *Sender);
+        void __fastcall Button6Click(TObject *Sender);
+    
 private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);

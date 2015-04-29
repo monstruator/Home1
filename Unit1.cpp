@@ -219,6 +219,8 @@ void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
    Form1->Button2->Enabled = true;
    Form1->Button3->Enabled = true;
    Form1->Button4->Enabled = true;
+   Form1->Button5->Enabled = true;
+   Form1->Button6->Enabled = true;
    Form1->TrackBar1-> Enabled = true;
   // Form1->CheckBox1->Enabled = true;
   // Form1->CheckBox2->Enabled = true;
@@ -295,14 +297,17 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
 //функция открытия и инициализации порта
 void COMOpen()
 {
+ char n_com[16];
  String portname;     	 //имя порта (например, "COM1", "COM2" и т.д.)
  DCB dcb;                //структура для общей инициализации порта DCB
  COMMTIMEOUTS timeouts;  //структура для установки таймаутов
- 
- portname = Form1->ComboBox1->Text;	//получить имя выбранного порта
+
+ //portname = Form1->ComboBox1->Text;	//получить имя выбранного порта
+ strcpy(n_com,("\\\\.\\"+Form1->ComboBox1->Text).c_str());
 
  //открыть порт, для асинхронных операций обязательно нужно указать флаг FILE_FLAG_OVERLAPPED
- COMport = CreateFile(portname.c_str(),GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
+ //COMport = CreateFile(portname.c_str(),GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
+ COMport = CreateFile(n_com,GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
  //здесь:
  // - portname.c_str() - имя порта в качестве имени файла, c_str() преобразует строку типа String в строку в виде массива типа char, иначе функция не примет
  // - GENERIC_READ | GENERIC_WRITE - доступ к порту на чтение/записть
@@ -332,7 +337,7 @@ void COMOpen()
   }
 
  //инициализация структуры DCB
- dcb.BaudRate = StrToInt("9600");       //задаём скорость передачи 115200 бод
+ dcb.BaudRate = StrToInt("115200");       //задаём скорость передачи 115200 бод
  dcb.fBinary = TRUE;                                    //включаем двоичный режим обмена
  dcb.fOutxCtsFlow = FALSE;                              //выключаем режим слежения за сигналом CTS
  dcb.fOutxDsrFlow = FALSE;                              //выключаем режим слежения за сигналом DSR
@@ -437,7 +442,9 @@ for (int i=1;i<=30;i++)
 
 void __fastcall TForm1::Timer1Timer(TObject *Sender)
 {
-         //  if (btr==3)
+        int sum=0;
+        for (int i=0;i<9;i++) sum+=bufrd[i];
+    if (sum==bufrd[9])
     {
        Form1->Label16 ->Caption = IntToStr(bufrd[0]);
        Form1->Label8 ->Caption = IntToStr(bufrd[1]);
@@ -484,7 +491,7 @@ void __fastcall TForm1::Button3Click(TObject *Sender)
 
         if (Form1->Edit2->Text!="")
         {
-        bufwr[0]=0xF1;
+        bufwr[0]=0xF5;
         bufwr[1] = StrToInt(Form1->Edit2->Text);
         writer->Resume();	//активировать поток записи в порт
         }
@@ -517,6 +524,29 @@ void __fastcall TForm1::TrackBar1Change(TObject *Sender)
         bufwr[1] = StrToInt(Form1->Edit4->Text);
         writer->Resume();	//активировать поток записи в порт
    }
+}
+
+
+
+void __fastcall TForm1::Button5Click(TObject *Sender)
+{
+     memset(bufwr,0,BUFSIZE);  //очистить программный передающий буфер, чтобы данные не накладывались друг на друга
+        PurgeComm(COMport, PURGE_TXCLEAR);  //очистить передающий буфер порта
+
+        bufwr[0]=0xF5;
+        bufwr[1] = 1;
+        writer->Resume();	//активировать поток записи в порт
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button6Click(TObject *Sender)
+{
+        memset(bufwr,0,BUFSIZE);  //очистить программный передающий буфер, чтобы данные не накладывались друг на друга
+        PurgeComm(COMport, PURGE_TXCLEAR);  //очистить передающий буфер порта
+
+        bufwr[0]=0xF5;
+        bufwr[1] = 0;
+        writer->Resume();	//активировать поток записи в порт
 }
 //---------------------------------------------------------------------------
 
